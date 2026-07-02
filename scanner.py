@@ -1,6 +1,7 @@
 import subprocess
 import re
-import os  # Klasör kontrolü için eklendi
+import os
+import sys
 
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
@@ -8,24 +9,38 @@ RED = "\033[91m"
 BLUE = "\033[94m"
 RESET = "\033[0m"
 
+def check_exit(user_input):
+    """Helper function to cleanly exit if user types 'exit'."""
+    if user_input.strip().lower() == 'exit':
+        print(f"\n{YELLOW}[*] Exiting NYXA Engine. Goodbye!{RESET}")
+        sys.exit(0)
+
 def run_automated_nmap():
-    """
-    Executes a native Nmap scan using subprocess based on user choice, 
-    displays live status, and saves the output to a text file.
-    """
     print(f"\n{BLUE}=== Phase 1: Native Nmap Scan Automation ==={RESET}")
-    target = input(f"{BLUE}[?] Enter Target IP or Domain (e.g., 192.168.1.1 or scanme.nmap.org): {RESET}").strip()
+    print(f"{YELLOW}[i] Type 'exit' at any prompt to quit the program.{RESET}")
+    
+    target = input(f"{BLUE}[?] Enter Target IP or Domain (e.g., 192.168.1.1): {RESET}").strip()
+    check_exit(target)
     
     if not target:
         print(f"{RED}[-] Error: Target cannot be empty!{RESET}")
         return None
 
-    print(f"\n{BLUE}[*] Select Scan Profile:")
-    print(f"1. Fast Scan (Top 100 ports + Service Versions)")
-    print(f"2. Comprehensive Scan (Default Scripts + OS Detection + Service Versions - Takes longer)")
-    print(f"3. Aggressive Scan (-A -T5) (Recommended for CTFs - Extremely Fast & Loud)")
-    print(f"4. Custom Arguments (Enter your own Nmap flags - DO NOT include output flags like -oN, -oX etc.){RESET}")
-    scan_choice = input(f"{BLUE}[?] Choice (1, 2, 3 or 4): {RESET}").strip()
+    # Döngüye alıyoruz ki geçersiz girişte menü tekrar gelsin
+    while True:
+        print(f"\n{BLUE}[*] Select Scan Profile:")
+        print(f"1. Fast Scan (Top 100 ports + Service Versions)")
+        print(f"2. Comprehensive Scan (Default Scripts + OS Detection + Service Versions)")
+        print(f"3. Aggressive Scan (-A -T5) (Recommended for CTFs)")
+        print(f"4. Custom Arguments (Enter your own Nmap flags)")
+        scan_choice = input(f"{BLUE}[?] Choice (1, 2, 3, 4 or type 'exit'): {RESET}").strip()
+        
+        check_exit(scan_choice)
+
+        if scan_choice in ["1", "2", "3", "4"]:
+            break
+        else:
+            print(f"{RED}[-] Invalid choice! Please enter a number between 1 and 4.{RESET}")
 
     nmap_args = ["nmap"]
 
@@ -37,7 +52,8 @@ def run_automated_nmap():
         nmap_args.extend(["-A", "-T5", target])
     elif scan_choice == "4":
         print(f"{YELLOW}[*] Custom Scan Selected.{RESET}")
-        custom_flags = input(f"{BLUE}[?] Enter your custom Nmap flags (e.g., -sS -sV -p 22,80,443): {RESET}").strip()
+        custom_flags = input(f"{BLUE}[?] Enter your custom Nmap flags: {RESET}").strip()
+        check_exit(custom_flags)
         
         cleaned_flags = re.sub(r'-o[NXGA]\s+\S+', '', custom_flags)
         cleaned_flags = re.sub(r'-o[NXGA]', '', cleaned_flags)
@@ -51,7 +67,6 @@ def run_automated_nmap():
 
     clean_target = target.replace(".", "_").replace("/", "_")
     
-    # 'results' klasörü yoksa oluşturuyoruz
     if not os.path.exists("results"):
         os.makedirs("results")
         
@@ -71,9 +86,7 @@ def run_automated_nmap():
 
     except subprocess.CalledProcessError as e:
         print(f"{RED}[-] Nmap process failed with exit code {e.returncode}{RESET}")
-        if "requires root privileges" in e.stderr or e.returncode == 1:
-            print(f"{RED}[!] Hint: Ensure you are running this script with 'sudo python3 app.py'{RESET}")
         return None
     except Exception as e:
-        print(f"{RED}[-] An unexpected error occurred during Nmap execution: {str(e)}{RESET}")
+        print(f"{RED}[-] An unexpected error occurred: {str(e)}{RESET}")
         return None
