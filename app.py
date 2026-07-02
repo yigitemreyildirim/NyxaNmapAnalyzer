@@ -29,7 +29,7 @@ def main():
 
         # Step 2: Artificial Intelligence Authentication Flow
         print(f"\n{BLUE}=== Phase 2: Artificial Intelligence Authentication Flow ==={RESET}")
-        choice = input(f"{BLUE}[?] Do you have a Google Gemini API Key? (yes / no) [Or press Enter to use Gemini]: {RESET}").strip().lower()
+        choice = input(f"{BLUE}[?] Do you have a Google Gemini API Key? (yes / no) [Or press Enter to use llama3]: {RESET}").strip().lower()
         
         check_exit(choice)
         
