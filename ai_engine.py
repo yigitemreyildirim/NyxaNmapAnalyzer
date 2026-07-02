@@ -78,7 +78,7 @@ def analyze_with_gemini(api_key, raw_text):
         "contents": [{"parts": [{"text": f"{SYSTEM_PROMPT}\n\nRaw Scan Output:\n{raw_text}"}]}],
         "generationConfig": {
             "temperature": 0.2, 
-            "maxOutputTokens": 8192  
+            "maxOutputTokens": 65536  
         }
     }
     try:
