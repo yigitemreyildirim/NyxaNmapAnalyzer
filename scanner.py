@@ -1,5 +1,6 @@
 import subprocess
 import re
+import os  # Klasör kontrolü için eklendi
 
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
@@ -38,7 +39,6 @@ def run_automated_nmap():
         print(f"{YELLOW}[*] Custom Scan Selected.{RESET}")
         custom_flags = input(f"{BLUE}[?] Enter your custom Nmap flags (e.g., -sS -sV -p 22,80,443): {RESET}").strip()
         
-        # Intercept and remove any accidental output flags
         cleaned_flags = re.sub(r'-o[NXGA]\s+\S+', '', custom_flags)
         cleaned_flags = re.sub(r'-o[NXGA]', '', cleaned_flags)
         flags_list = [f for f in cleaned_flags.split(" ") if f]
@@ -50,7 +50,12 @@ def run_automated_nmap():
         nmap_args.extend(["-sV", "-F", target])
 
     clean_target = target.replace(".", "_").replace("/", "_")
-    output_filename = f"nmap_raw_{clean_target}.txt"
+    
+    # 'results' klasörü yoksa oluşturuyoruz
+    if not os.path.exists("results"):
+        os.makedirs("results")
+        
+    output_filename = os.path.join("results", f"nmap_raw_{clean_target}.txt")
 
     print(f"{GREEN}[*] Launching native Nmap subprocess: {' '.join(nmap_args)}{RESET}")
     print(f"{YELLOW}[*] Scanning in progress. Please wait...{RESET}")

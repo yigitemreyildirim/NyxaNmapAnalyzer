@@ -16,17 +16,14 @@ def print_banner():
 def main():
     print_banner()
     
-    # Step 1: Run Automated Subprocess Nmap Scan from scanner.py
     scan_file = run_automated_nmap()
     if not scan_file:
         print(f"{RED}[-] Automation pipeline broken. Exiting script execution.{RESET}")
         return
 
-    # Step 2: Read the automatically generated file
     with open(scan_file, "r", encoding="utf-8") as f:
         scan_data = f.read()
 
-    # Step 3: Interactive AI Authentication Flow using ai_engine modül
     print(f"\n{BLUE}=== Phase 2: Artificial Intelligence Authentication Flow ==={RESET}")
     choice = input(f"{BLUE}[?] Do you have a Google Gemini API Key? (yes / no): {RESET}").strip().lower()
     
@@ -62,20 +59,21 @@ def main():
         print(f"{YELLOW}[*] Unknown option. Defaulting to local environment automation...{RESET}")
         ai_engine.start_local_ollama()
 
-    # Step 4: Run the selected AI Engine Analysis
     if use_cloud and api_key:
         final_report = ai_engine.analyze_with_gemini(api_key, scan_data)
     else:
         final_report = ai_engine.analyze_with_ollama(scan_data)
 
-    # Step 5: Display and Save Report
     print(f"\n{GREEN}==================================================")
     print("         AI PENETRATION TESTING REPORT        ")
     print(f"=================================================={RESET}")
     print(final_report)
     print(f"{GREEN}=================================================={RESET}")
     
-    output_report_name = f"analysis_report_{scan_file.split('.')[0]}.md"
+    # MD raporunu results klasörüne kaydediyoruz
+    pure_filename = os.path.basename(scan_file).split('.')[0]
+    output_report_name = os.path.join("results", f"analysis_report_{pure_filename}.md")
+    
     with open(output_report_name, "w", encoding="utf-8") as out_f:
         out_f.write(final_report)
     print(f"\n{GREEN}[+] Full analytical report generated and saved as: {output_report_name}{RESET}")
