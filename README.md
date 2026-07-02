@@ -54,7 +54,14 @@ cd /opt/NyxaNmapAnalyzer
 sudo pip3 install -r requirements.txt --break-system-packages
 ```
 
-### Step 5: Execute the Analyzer Engine with Root Privileges
+### Step 5: If you have a Gemini API key,skip this step.(Runs correctly with at least 8 GB of RAM)
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+
+ollama pull llama3
+```
+
+### Step 6: Execute the Analyzer Engine with Root Privileges
 ```bash
 sudo python3 app.py
 ```
@@ -73,6 +80,7 @@ Press `3` for rapid CTF enumeration or choose other options according to your sc
 * Type `yes` if you already have an API key and paste it.
 * Type `no` to trigger the Automated Firefox Flow which will open your browser directly to the Google AI Studio page.
 * Press **Enter** on an empty prompt to fall back entirely to your local environment; NYXA will spawn a brand new independent terminal window running `ollama run llama3` automatically.
+
 
 ### 4. Analyze Report
 Check your workspace directory! A freshly generated `.md` file filled with service analyses, CVE cross-references, and remediation guidance is waiting for you.
