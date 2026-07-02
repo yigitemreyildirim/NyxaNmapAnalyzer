@@ -56,7 +56,10 @@ def analyze_with_gemini(api_key, raw_text):
     
     payload = {
         "contents": [{"parts": [{"text": f"{SYSTEM_PROMPT}\n\nRaw Scan Output:\n{raw_text}"}]}],
-        "generationConfig": {"temperature": 0.2, "maxOutputTokens": 3000}
+        "generationConfig": {
+            "temperature": 0.2, 
+            "maxOutputTokens": 8192  # Sınırı maksimuma çıkardık!
+        }
     }
     try:
         res = requests.post(url, json=payload, headers={"Content-Type": "application/json"}, timeout=120)
