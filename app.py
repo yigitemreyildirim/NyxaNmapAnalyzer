@@ -36,7 +36,7 @@ def main():
         api_key = None
         use_cloud = False
         
-        # Kullanıcı 'yes', 'y' dediyse veya doğrudan enter'a basıp bulut modunu seçtiyse
+       
         if choice in ['yes', 'y', '']:
             api_key = input(f"{BLUE}[?] Enter your Gemini API Key: {RESET}").strip()
             check_exit(api_key)
@@ -54,7 +54,7 @@ def main():
                     return
                 
         elif choice in ['no', 'n', 'create']:
-            # Firefox'u güvenli modlarla tetikleyen yeni fonksiyonu çağırır
+            
             ai_engine.open_firefox_for_api()
             
             api_key = input(f"\n{BLUE}[?] Paste your newly created Gemini API Key here (or type 'local' to fallback to Ollama): {RESET}").strip()
@@ -72,7 +72,7 @@ def main():
                 print(f"{YELLOW}[*] Fallback triggered. Diverting stream to Local Ollama Engine setup...{RESET}")
                 ai_engine.start_local_ollama()
         else:
-            # Kullanıcı doğrudan geçersiz bir şey girdiyse ya da 'local' yazdıysa
+            
             print(f"{YELLOW}[*] Local mode triggered. Starting Local Ollama workflow...{RESET}")
             ai_engine.start_local_ollama()
 
