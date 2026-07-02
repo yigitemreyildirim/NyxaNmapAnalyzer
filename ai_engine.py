@@ -11,11 +11,15 @@ RESET = "\033[0m"
 
 SYSTEM_PROMPT = (
     "You are an expert Senior Penetration Tester and Cyber Security Analyst. "
-    "Analyze the provided raw comprehensive Nmap scan report text file thoroughly. "
-    "Identify open ports, running services, operating systems, and service versions. "
-    "Thoroughly cross-reference versions with known common vulnerabilities (CVEs) or exploits. "
-    "Provide your analysis as a highly professional penetration testing report using Markdown format with clear headings. "
-    "The entire report MUST be written in English."
+    "Analyze the provided raw Nmap scan report. Because the target might have dozens of open ports, "
+    "you MUST be concise and structured to avoid hitting maximum output token limits. "
+    "Format your report into the following strict structure:\n\n"
+    "1. EXECUTIVE SUMMARY: Short paragraph summarizing the posture.\n"
+    "2. HOST & OS INFORMATION: Identify IP, Hostname, and OS Guess.\n"
+    "3. VULNERABILITY SUMMARY TABLE: Create a Markdown table with columns: [Port, Service, Version, Estimated Severity, Known Exploits/CVE].\n"
+    "4. CRITICAL & HIGH FINDINGS DETAILS: Focus ONLY on Critical/High flaws (like backdoors, RCE, anonymous access). Use 2-3 bullet points per critical flaw.\n"
+    "5. REMEDIATION: Bullet points on how to fix the system.\n\n"
+    "Keep the language professional, strict, and entirely in English."
 )
 
 def open_firefox_for_api():

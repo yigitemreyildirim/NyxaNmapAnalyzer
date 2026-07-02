@@ -25,7 +25,7 @@ def main():
         scan_data = f.read()
 
     print(f"\n{BLUE}=== Phase 2: Artificial Intelligence Authentication Flow ==={RESET}")
-    choice = input(f"{BLUE}[?] Do you have a Google Gemini API Key? (yes / no): {RESET}").strip().lower()
+    choice = input(f"{BLUE}[?] Do you have a Google Gemini API Key? (yes / no) [Press Enter for Local Ollama/Llama3]: {RESET}").strip().lower()
     
     api_key = None
     use_cloud = False
