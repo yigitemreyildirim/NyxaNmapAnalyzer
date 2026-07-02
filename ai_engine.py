@@ -25,10 +25,26 @@ SYSTEM_PROMPT = (
 def open_firefox_for_api():
     url = "https://aistudio.google.com/api-keys"
     print(f"\n{YELLOW}[*] Opening Firefox to: {url}{RESET}")
+    
+    
+    try:
+        subprocess.Popen(["xdg-open", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return
+    except Exception:
+        pass
+
+    #
     try:
         subprocess.Popen(["firefox", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return
     except Exception:
+        pass
+
+    
+    try:
         webbrowser.open(url)
+    except Exception:
+        print(f"{RED}[-] Could not auto-launch browser. Please manually visit: {url}{RESET}")
 
 def verify_gemini_key(api_key):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
