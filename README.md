@@ -83,6 +83,7 @@ Check your workspace directory! A freshly generated `.md` file filled with servi
 
 This tool is engineered strictly for educational purposes, Capture The Flag (CTF) challenges, and fully authorized infrastructure audits.
 
-Running unauthorized scans against public infrastructure can trigger security alerts and lead to severe legal repercussions. The developer assumes absolutely no liability for misuse or damages caused by this utility.
+Running unauthorized scans against public infrastructure can trigger security alerts and lead to severe legal repercussions. The developer assumes absolutely no liability for misuse or damages caused by this utility...
+
 
 
