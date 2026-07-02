@@ -1,62 +1,84 @@
 import os
-from scanner import run_network_scan
-from ai_analyser import analyze_nmap_report
+from scanner import run_automated_nmap
+import ai_engine
 
-def save_report_to_file(target, report_content):
-    """
-    Saves the generated AI analysis report into a clean Markdown (.md) file.
-    """
-    clean_target = target.replace(".", "_").replace("/", "_")
-    filename = f"scan_report_{clean_target}.md"
-    
-    try:
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(report_content)
-        print(f"\n[+] Professional report successfully saved to: {filename}")
-    except Exception as e:
-        print(f"\n[-] Error saving report to file: {str(e)}")
+GREEN = "\033[92m"
+YELLOW = "\033[93m"
+RED = "\033[91m"
+BLUE = "\033[94m"
+RESET = "\033[0m"
+
+def print_banner():
+    print(f"{BLUE}" + "="*50)
+    print("    NYXA AUTOMATED NMAP & AI REPORTING ENGINE     ")
+    print("="*50 + f"{RESET}")
 
 def main():
-    print("="*50)
-    print("       NYXA AI-POWERED NMAP ANALYZER       ")
-    print("="*50)
+    print_banner()
     
-    # Step 1: Get Target IP/Domain from user
-    target_host = input("[?] Enter Target IP or Domain to scan: ").strip()
-    
-    if not target_host:
-        print("[-] Target cannot be empty! Exiting...")
-        return
-        
-    # Step 2: Trigger the Nmap scan module
-    try:
-        raw_data = run_network_scan(target_host)
-        
-        if not raw_data or "=== TARGET:" not in raw_data:
-            print("[-] No open ports or hosts found. Make sure the target is up.")
-            return
-            
-        print("\n--- RAW NMAP SCAN RESULTS ---")
-        print(raw_data)
-        print("-" * 30)
-        
-    except Exception as e:
-        print(f"[-] An error occurred during Nmap scan: {str(e)}")
-        print("[!] Tip: Make sure Nmap is installed on your OS and added to PATH.")
+    # Step 1: Run Automated Subprocess Nmap Scan from scanner.py
+    scan_file = run_automated_nmap()
+    if not scan_file:
+        print(f"{RED}[-] Automation pipeline broken. Exiting script execution.{RESET}")
         return
 
-    # Step 3: Trigger the Local AI analysis module
-    ai_report = analyze_nmap_report(raw_data, model_name="llama3")
+    # Step 2: Read the automatically generated file
+    with open(scan_file, "r", encoding="utf-8") as f:
+        scan_data = f.read()
+
+    # Step 3: Interactive AI Authentication Flow using ai_engine modül
+    print(f"\n{BLUE}=== Phase 2: Artificial Intelligence Authentication Flow ==={RESET}")
+    choice = input(f"{BLUE}[?] Do you have a Google Gemini API Key? (yes / no): {RESET}").strip().lower()
     
-    print("\n" + "="*50)
+    api_key = None
+    use_cloud = False
+    
+    if choice in ['yes', 'y']:
+        api_key = input(f"{BLUE}[?] Enter your Gemini API Key: {RESET}").strip()
+        print(f"{YELLOW}[*] Validating your API Key...{RESET}")
+        if ai_engine.verify_gemini_key(api_key):
+            print(f"{GREEN}[+] API Key verified successfully! Proceeding with Cloud Analysis...{RESET}")
+            use_cloud = True
+        else:
+            print(f"{RED}[-] Invalid API Key! Exiting safely.{RESET}")
+            return
+            
+    elif choice in ['no', 'n', 'create']:
+        ai_engine.open_firefox_for_api()
+        
+        api_key = input(f"\n{BLUE}[?] Paste your newly created Gemini API Key here (or press Enter to fallback to Local Ollama): {RESET}").strip()
+        if api_key:
+            print(f"{YELLOW}[*] Validating your new API Key...{RESET}")
+            if ai_engine.verify_gemini_key(api_key):
+                print(f"{GREEN}[+] API Key verified successfully!{RESET}")
+                use_cloud = True
+            else:
+                print(f"{RED}[-] Invalid API Key entered. Exiting loop safely.{RESET}")
+                return
+        else:
+            print(f"{YELLOW}[*] No key entered. Diverting stream to Local Engine setup...{RESET}")
+            ai_engine.start_local_ollama()
+    else:
+        print(f"{YELLOW}[*] Unknown option. Defaulting to local environment automation...{RESET}")
+        ai_engine.start_local_ollama()
+
+    # Step 4: Run the selected AI Engine Analysis
+    if use_cloud and api_key:
+        final_report = ai_engine.analyze_with_gemini(api_key, scan_data)
+    else:
+        final_report = ai_engine.analyze_with_ollama(scan_data)
+
+    # Step 5: Display and Save Report
+    print(f"\n{GREEN}==================================================")
     print("         AI PENETRATION TESTING REPORT        ")
-    print("="*50)
-    print(ai_report)
-    print("="*50)
+    print(f"=================================================={RESET}")
+    print(final_report)
+    print(f"{GREEN}=================================================={RESET}")
     
-    # Step 4: Save the final markdown report
-    if "Error:" not in ai_report:
-        save_report_to_file(target_host, ai_report)
+    output_report_name = f"analysis_report_{scan_file.split('.')[0]}.md"
+    with open(output_report_name, "w", encoding="utf-8") as out_f:
+        out_f.write(final_report)
+    print(f"\n{GREEN}[+] Full analytical report generated and saved as: {output_report_name}{RESET}")
 
 if __name__ == "__main__":
     main()
