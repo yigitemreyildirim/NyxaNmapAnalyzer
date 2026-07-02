@@ -26,40 +26,63 @@ To keep the codebase modular, highly readable, and maintainable, the project is 
 ├── scanner.py         # Subprocess Automation & Native Nmap Handling
 ├── ai_engine.py       # Cloud/Local LLM Communications & Firefox Control
 └── requirements.txt   # Third-Party Python Dependencies
+```
 
-# 🚀 Step-by-Step Installation Guide (For Absolute Beginners)
+---
+
+## 🚀 Step-by-Step Installation Guide (For Absolute Beginners)
 
 If you are brand new to Linux or cybersecurity, follow these steps exactly. Open your Kali Linux Terminal and copy-paste the following commands line by line:
 
-Step 1: Navigate into the Folder
+### Step 1: Navigate into the Folder
+```bash
 cd /opt
+```
 
-Step 2: Clone the Repository Directly into /opt
+### Step 2: Clone the Repository Directly into /opt
+```bash
 sudo git clone https://github.com/yigitemreyildirim/NyxaNmapAnalyzer.git
+```
 
-Step 3: Navigate into the Project Folder
+### Step 3: Navigate into the Project Folder
+```bash
 cd /opt/NyxaNmapAnalyzer
+```
 
-Step 4: Install Python Dependencies Safely
+### Step 4: Install Python Dependencies Safely
+```bash
 sudo pip3 install -r requirements.txt --break-system-packages
+```
 
-Step 4: Execute the Analyzer Engine with Root Privileges
+### Step 5: Execute the Analyzer Engine with Root Privileges
+```bash
 sudo python3 app.py
+```
+
+---
 
 ## 🎮 How to Use
 
-Define Target: Enter your target domain or IP address when prompted (e.g., 192.168.1.X or scanme.nmap.org).
+### 1. Define Target
+Enter your target domain or IP address when prompted (e.g., `192.168.1.X` or `scanme.nmap.org`).
 
-Choose Scan Profile: Press 3 for rapid CTF enumeration or choose other options according to your scope.
+### 2. Choose Scan Profile
+Press `3` for rapid CTF enumeration or choose other options according to your scope.
 
-AI Choice: * Type yes if you already have an API key and paste it.
+### 3. AI Choice
+* Type `yes` if you already have an API key and paste it.
+* Type `no` to trigger the Automated Firefox Flow which will open your browser directly to the Google AI Studio page.
+* Press **Enter** on an empty prompt to fall back entirely to your local environment; NYXA will spawn a brand new independent terminal window running `ollama run llama3` automatically.
 
-Type no to trigger the Automated Firefox Flow which will open your browser directly to the Google AI Studio page.
+### 4. Analyze Report
+Check your workspace directory! A freshly generated `.md` file filled with service analyses, CVE cross-references, and remediation guidance is waiting for you.
 
-Press Enter on an empty prompt to fall back entirely to your local environment; NYXA will spawn a brand new independent terminal window running ollama run llama3 automatically.
-
-Analyze Report: Check your workspace directory! A freshly generated .md file filled with service analyses, CVE cross-references, and remediation guidance is waiting for you.
+---
 
 ## ⚠️ Legal Disclaimer
 
-This tool is engineered strictly for educational purposes, Capture The Flag (CTF) challenges, and fully authorized infrastructure audits. Running unauthorized scans against public infrastructure can trigger security alerts and lead to severe legal repercussions. The developer assumes absolutely no liability for misuse or damages caused by this utility.
+This tool is engineered strictly for educational purposes, Capture The Flag (CTF) challenges, and fully authorized infrastructure audits.
+
+Running unauthorized scans against public infrastructure can trigger security alerts and lead to severe legal repercussions. The developer assumes absolutely no liability for misuse or damages caused by this utility.
+
+
