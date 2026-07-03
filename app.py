@@ -18,7 +18,7 @@ def main():
     try:
         print_banner()
         
-        # Step 1: Run Nmap Scan Automation
+       
         scan_file = run_automated_nmap()
         if not scan_file:
             print(f"{RED}[-] Automation pipeline broken. Exiting script execution.{RESET}")
@@ -27,7 +27,7 @@ def main():
         with open(scan_file, "r", encoding="utf-8") as f:
             scan_data = f.read()
 
-        # Step 2: Artificial Intelligence Authentication Flow
+       
         print(f"\n{BLUE}=== Phase 2: Artificial Intelligence Authentication Flow ==={RESET}")
         choice = input(f"{BLUE}[?] Do you have a Google Gemini API Key? (yes / no) [Or press Enter to use llama3]: {RESET}").strip().lower()
         
@@ -76,7 +76,7 @@ def main():
             print(f"{YELLOW}[*] Local mode triggered. Starting Local Ollama workflow...{RESET}")
             ai_engine.start_local_ollama()
 
-        # Step 3: Run Selected AI Engine
+        
         if use_cloud and api_key:
             print(f"\n{YELLOW}[*] Forwarding full Nmap report to Gemini Cloud AI...{RESET}")
             final_report = ai_engine.analyze_with_gemini(api_key, scan_data)
@@ -91,7 +91,7 @@ def main():
         print(final_report)
         print(f"{GREEN}=================================================={RESET}")
         
-        # Step 5: Save Generated Report to Local Workspace
+        
         pure_filename = os.path.basename(scan_file).split('.')[0]
         output_report_name = os.path.join("results", f"analysis_report_{pure_filename}.md")
         
